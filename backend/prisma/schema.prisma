@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define a tabela de filiais
+model Branch {
+  id          String        @id @default(cuid())
+  name        String
+  location    String
+  stocks      Stock[]
+  SaleHistory SaleHistory[]
+
+  @@map("branchs")
+}
+
+// Define a tabela de produtos
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  category    String
+  stocks      Stock[]
+  SaleHistory SaleHistory[]
+
+  @@map("products")
+}
+
+// Define a tabela de estoque
+model Stock {
+  id            String        @id @default(cuid())
+  quantity      Int
+  branch        Branch        @relation(fields: [branchId], references: [id])
+  branchId      String
+  product       Product       @relation(fields: [productId], references: [id])
+  productId     String
+  saleHistories SaleHistory[]
+
+  @@map("stocks")
+}
+
+// Define a tabela de histórico de vendas
+model SaleHistory {
+  id        String   @id @default(cuid())
+  quantity  Int
+  saleDate  DateTime @default(now())
+  branch    Branch   @relation(fields: [branchId], references: [id])
+  branchId  String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  Stock     Stock?   @relation(fields: [stockId], references: [id])
+  stockId   String?
+
+  @@map("sales_history")
+}
