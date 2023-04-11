@@ -18,15 +18,25 @@ model Branch {
   @@map("branchs")
 }
 
+// Define a tabela de categorias
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String
+  products Product[]
+
+  @@map("categories")
+}
+
 // Define a tabela de produtos
 model Product {
   id          String        @id @default(cuid())
-  name        String
-  description String
+  name        String        @unique
   price       Float
-  category    String
   stocks      Stock[]
   SaleHistory SaleHistory[]
+  category    Category?     @relation(fields: [categoryId], references: [id])
+  categoryId  String
 
   @@map("products")
 }
@@ -54,7 +64,7 @@ model SaleHistory {
   product   Product  @relation(fields: [productId], references: [id])
   productId String
   Stock     Stock?   @relation(fields: [stockId], references: [id])
-  stockId   String?
+  stockId   String
 
   @@map("sales_history")
 }
