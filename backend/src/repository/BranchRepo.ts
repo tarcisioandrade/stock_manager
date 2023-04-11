@@ -1,8 +1,8 @@
 import prisma from "@/database/prisma";
-import { BranchType } from "@/types/Branch";
+import { Branch } from "@prisma/client";
 
 export interface IBranchRepo {
-  getBranchById(id: string): Promise<BranchType>;
+  getBranchById(id: string): Promise<Branch | null>;
 }
 
 export class BranchRepo implements IBranchRepo {

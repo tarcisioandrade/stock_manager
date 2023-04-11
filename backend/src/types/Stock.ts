@@ -1,5 +1,4 @@
 import { Product } from "@prisma/client";
-import { BranchType } from "./Branch";
 
 export type StockType = {
   id: string;
@@ -7,3 +6,10 @@ export type StockType = {
   branchId: string;
   productId: string;
 };
+
+export type ProductStock = {
+  stock: {
+    id: string;
+    quantity: number;
+  };
+} & Product;

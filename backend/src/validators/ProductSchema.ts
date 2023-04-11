@@ -2,13 +2,15 @@ import { z } from "zod";
 
 export const ProductSchema = z.object({
   name: z.string(),
-  description: z.string().optional(),
+  description: z.string(),
   price: z.string().transform((price) => {
     const priceFormatted = price.trim().replace("R$", "").replace(",", ".");
 
-    return Number(priceFormatted);
+    return priceFormatted
   }),
-  categoryId: z.string(),
+  category_id: z.string().cuid(),
   quantity: z.string(),
-  branchId: z.string(),
+  branch_id: z.string().cuid(),
 });
+
+
