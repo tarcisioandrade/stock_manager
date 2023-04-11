@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Define a tabela de filiais
 model Branch {
   id          String        @id @default(cuid())
   name        String
@@ -18,7 +17,6 @@ model Branch {
   @@map("branchs")
 }
 
-// Define a tabela de categorias
 model Category {
   id       String    @id @default(cuid())
   name     String
@@ -28,43 +26,42 @@ model Category {
   @@map("categories")
 }
 
-// Define a tabela de produtos
 model Product {
   id          String        @id @default(cuid())
   name        String        @unique
+  description String
   price       Float
   stocks      Stock[]
   SaleHistory SaleHistory[]
-  category    Category?     @relation(fields: [categoryId], references: [id])
-  categoryId  String
+  category    Category?     @relation(fields: [category_id], references: [id])
+  category_id String
 
   @@map("products")
 }
 
-// Define a tabela de estoque
 model Stock {
   id            String        @id @default(cuid())
   quantity      Int
-  branch        Branch        @relation(fields: [branchId], references: [id])
-  branchId      String
-  product       Product       @relation(fields: [productId], references: [id])
-  productId     String
+  branch        Branch        @relation(fields: [branch_id], references: [id])
+  branch_id     String
+  product       Product       @relation(fields: [product_id], references: [id])
+  product_id    String
   saleHistories SaleHistory[]
 
   @@map("stocks")
 }
 
-// Define a tabela de histórico de vendas
 model SaleHistory {
-  id        String   @id @default(cuid())
-  quantity  Int
-  saleDate  DateTime @default(now())
-  branch    Branch   @relation(fields: [branchId], references: [id])
-  branchId  String
-  product   Product  @relation(fields: [productId], references: [id])
-  productId String
-  Stock     Stock?   @relation(fields: [stockId], references: [id])
-  stockId   String
+  id         String   @id @default(cuid())
+  quantity   Int
+  saleDate   DateTime @default(now())
+  price      Float
+  branch     Branch   @relation(fields: [branch_id], references: [id])
+  branch_id  String
+  product    Product  @relation(fields: [product_id], references: [id])
+  product_id String
+  Stock      Stock?   @relation(fields: [stock_id], references: [id])
+  stock_id   String
 
   @@map("sales_history")
 }
