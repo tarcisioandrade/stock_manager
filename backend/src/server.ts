@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import path from "path";
 import cors from "cors";
 import routes from "@/routes";
@@ -12,12 +12,12 @@ app.use(express.json());
 
 app.use("/", routes);
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   const erro = new Error("Not Found");
   next(erro);
 });
 
-app.use((error, req, res, next) => {
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   res.status(error.status || 500);
   return res.send({
     error: error.message,

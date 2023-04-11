@@ -25,16 +25,17 @@ export class ProductController {
 
     this.createProduct = this.createProduct.bind(this);
     this.getAllProducts = this.getAllProducts.bind(this);
+    this.getAllCategories = this.getAllCategories.bind(this);
   }
 
   async createProduct(req: Request, res: Response) {
     try {
       const product = ProductSchema.parse(req.body);
 
-      const branch = await this.BranchRepo.getBranchById(product.branchId);
+      const branch = await this.BranchRepo.getBranchById(product.branch_id);
       const nameIsValid = await this.ProductRepo.getProductByName(product.name);
       const category = await this.CategoryRepo.getCategoryByID(
-        product.categoryId
+        product.category_id
       );
 
       if (!category) {
@@ -62,7 +63,7 @@ export class ProductController {
 
       await this.StockRepo.addStock(
         newProduct.id,
-        product.branchId,
+        product.branch_id,
         Number(product.quantity)
       );
 
@@ -82,32 +83,40 @@ export class ProductController {
   }
 
   async getAllProducts(req: Request, res: Response) {
-    const { branchId, q, categoryId } = req.query;
+    const { branch_id, q, category_id } = req.query;
 
-    if (!branchId) {
+    if (!branch_id) {
       res.status(400).json({
         error: "Branch id is required",
       });
       return;
     }
 
-    const category = await this.CategoryRepo.getCategoryByID(
-      categoryId as string
-    );
+    if (category_id) {
+      const category = await this.CategoryRepo.getCategoryByID(
+        category_id as string
+      );
 
-    if (!category) {
-      res.status(400).json({
-        error: "Category not found",
-      });
-      return;
+      if (!category) {
+        res.status(400).json({
+          error: "Category not found",
+        });
+        return;
+      }
     }
 
-    const products = await this.StockRepo.getStock(
-      branchId as string,
-      categoryId as string,
+    const products = await this.StockRepo.getAllStocks(
+      branch_id as string,
+      category_id as string,
       q as string
     );
 
     res.status(200).json({ products });
+  }
+
+  async getAllCategories(req: Request, res: Response) {
+    const categories = await this.CategoryRepo.getCategories();
+
+    res.status(200).json({ categories });
   }
 }

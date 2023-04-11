@@ -1,26 +1,20 @@
-import { ProductType } from "@/types/Product";
+import { ProductInput } from "@/types/Product";
 import prisma from "@/database/prisma";
+import { Product } from "@prisma/client";
 
 export interface IProductRepo {
-  addProduct(product: ProductType): Promise<ProductType>;
-  // getAllProductsWithFilter(
-  //   branch: string,
-  //   category: string,
-  //   q?: string
-  // ): Promise<ProductType[]>;
-  // sellProduct(id: string, quantity: number): Promise<void>;
-  // getAllProducts(): Promise<ProductType[]>;
-  getProductByName(name: string): Promise<ProductType>;
+  addProduct(product: ProductInput): Promise<Product>;
+  getProductByName(name: string): Promise<Product | null>;
 }
 
 export class ProductRepo implements IProductRepo {
-  async addProduct(product: ProductType) {
+  async addProduct(product: ProductInput) {
     const newProduct = await prisma.product.create({
       data: {
         name: product.name,
         description: product.description,
-        price: product.price,
-        categoryId: product.categoryId,
+        price: Number(product.price),
+        category_id: product.category_id,
       },
     });
 
@@ -36,5 +30,4 @@ export class ProductRepo implements IProductRepo {
 
     return product;
   }
-
 }
