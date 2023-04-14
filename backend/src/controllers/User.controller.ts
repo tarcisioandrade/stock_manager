@@ -1,6 +1,6 @@
 import { IEntityRepo } from "@/repository/EntityRepo";
 import { IUserRepo } from "@/repository/UserRepo";
-import { EditUserSchema } from "@/validators/UserSchema";
+import { EditUserSchema } from "@/schemas/UserSchema";
 import { Request, Response } from "express";
 import { ZodError, z } from "zod";
 import bcrypt from "bcrypt";
@@ -59,15 +59,10 @@ export class UserController {
       if (telephone) {
         updates.telephone = telephone;
       }
-      
-      if (updates) {
-        await this.UserRepo.updateUser(id, updates);
 
-        res.sendStatus(200);
-        return;
-      }
-
-      res.sendStatus(400);
+      this.UserRepo.updateUser(id, updates)
+        .then(() => res.sendStatus(200))
+        .catch(() => res.sendStatus(400));
     } catch (err) {
       if (err instanceof ZodError) {
         return res.status(400).json({ error: ZodErrorFormatter(err) });

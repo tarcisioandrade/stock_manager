@@ -39,7 +39,7 @@ model User {
 
 model Branch {
   id           String        @id @default(cuid())
-  name         String
+  name         String        @unique
   location     String
   created_at   DateTime      @default(now())
   stocks       Stock[]
@@ -67,7 +67,7 @@ model Product {
   price        Float
   stocks       Stock[]
   sale_history SaleHistory[]
-  category     Category     @relation(fields: [category_id], references: [id])
+  category     Category      @relation(fields: [category_id], references: [id])
   category_id  String
 
   @@map("products")

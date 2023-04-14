@@ -1,6 +1,6 @@
 import { IUserRepo } from "@/repository/UserRepo";
 import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
-import { LoginSchema, UserSchema } from "@/validators/UserSchema";
+import { LoginSchema, UserSchema } from "@/schemas/UserSchema";
 import { Request, Response } from "express";
 import { ZodError } from "zod";
 import bcrypt from "bcrypt";
@@ -35,9 +35,8 @@ export class AuthController {
 
   async signup(req: Request, res: Response) {
     try {
-      const { email, password, branch_id, entity_id, name, telephone } = UserSchema.parse(
-        req.body
-      );
+      const { email, password, branch_id, entity_id, name, telephone } =
+        UserSchema.parse(req.body);
 
       const userValid = await this.UserRepo.getUserByEmail(email);
 
@@ -56,7 +55,7 @@ export class AuthController {
         hashedPassword,
         branch_id,
         entity_id,
-        telephone,
+        telephone
       );
 
       res.status(201).json({ id: user.id });
@@ -64,7 +63,7 @@ export class AuthController {
       if (err instanceof ZodError) {
         return res.status(400).json({ error: ZodErrorFormatter(err) });
       } else {
-        console.log('err', err)
+        console.log("err", err);
         return res.sendStatus(500);
       }
     }

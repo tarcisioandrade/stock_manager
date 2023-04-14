@@ -3,7 +3,7 @@ import { ICategoryRepo } from "@/repository/CategoryRepo";
 import { IProductRepo } from "@/repository/ProductRepo";
 import { IStockRepo } from "@/repository/StockRepo";
 import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
-import { ProductSchema } from "@/validators/ProductSchema";
+import { ProductSchema } from "@/schemas/ProductSchema";
 import { Request, Response } from "express";
 import { ZodError } from "zod";
 
