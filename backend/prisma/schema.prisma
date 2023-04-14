@@ -7,14 +7,48 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Branch {
-  id          String        @id @default(cuid())
-  name        String
-  location    String
-  stocks      Stock[]
-  SaleHistory SaleHistory[]
+model Entity {
+  id         String   @id @default(cuid())
+  name       String   @unique
+  email      String   @unique
+  telephone  String   @unique
+  password   String
+  role       Role     @default(ADMIN)
+  created_at DateTime @default(now())
+  branches   Branch[]
+  users      User[]
 
-  @@map("branchs")
+  @@map("entities")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  name       String
+  password   String
+  telephone  String?
+  created_at DateTime @default(now())
+  role       Role     @default(USER)
+  branch     Branch   @relation(fields: [branch_id], references: [id])
+  branch_id  String
+  entity     Entity   @relation(fields: [entity_id], references: [id])
+  entity_id  String
+
+  @@map("users")
+}
+
+model Branch {
+  id           String        @id @default(cuid())
+  name         String
+  location     String
+  created_at   DateTime      @default(now())
+  stocks       Stock[]
+  sale_history SaleHistory[]
+  entity       Entity        @relation(fields: [entity_id], references: [id])
+  entity_id    String
+  User         User[]
+
+  @@map("branches")
 }
 
 model Category {
@@ -27,26 +61,26 @@ model Category {
 }
 
 model Product {
-  id          String        @id @default(cuid())
-  name        String        @unique
-  description String
-  price       Float
-  stocks      Stock[]
-  SaleHistory SaleHistory[]
-  category    Category?     @relation(fields: [category_id], references: [id])
-  category_id String
+  id           String        @id @default(cuid())
+  name         String        @unique
+  description  String
+  price        Float
+  stocks       Stock[]
+  sale_history SaleHistory[]
+  category     Category     @relation(fields: [category_id], references: [id])
+  category_id  String
 
   @@map("products")
 }
 
 model Stock {
-  id            String        @id @default(cuid())
-  quantity      Int
-  branch        Branch        @relation(fields: [branch_id], references: [id])
-  branch_id     String
-  product       Product       @relation(fields: [product_id], references: [id])
-  product_id    String
-  saleHistories SaleHistory[]
+  id             String        @id @default(cuid())
+  quantity       Int
+  branch         Branch        @relation(fields: [branch_id], references: [id])
+  branch_id      String
+  product        Product       @relation(fields: [product_id], references: [id])
+  product_id     String
+  sale_histories SaleHistory[]
 
   @@map("stocks")
 }
@@ -54,14 +88,19 @@ model Stock {
 model SaleHistory {
   id         String   @id @default(cuid())
   quantity   Int
-  saleDate   DateTime @default(now())
+  sale_date  DateTime @default(now())
   price      Float
   branch     Branch   @relation(fields: [branch_id], references: [id])
   branch_id  String
   product    Product  @relation(fields: [product_id], references: [id])
   product_id String
-  Stock      Stock?   @relation(fields: [stock_id], references: [id])
+  stock      Stock?   @relation(fields: [stock_id], references: [id])
   stock_id   String
 
   @@map("sales_history")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
