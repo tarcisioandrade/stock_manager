@@ -2,6 +2,7 @@ import { IBranchRepo } from "@/repository/BranchRepo";
 import { ICategoryRepo } from "@/repository/CategoryRepo";
 import { IProductRepo } from "@/repository/ProductRepo";
 import { IStockRepo } from "@/repository/StockRepo";
+import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
 import { ProductSchema } from "@/validators/ProductSchema";
 import { Request, Response } from "express";
 import { ZodError } from "zod";
@@ -71,10 +72,7 @@ export class ProductController {
     } catch (err) {
       if (err instanceof ZodError) {
         return res.status(400).json({
-          error: err.issues.map((issue) => ({
-            path: issue.path[0],
-            message: issue.message,
-          })),
+          error: ZodErrorFormatter(err),
         });
       }
       console.log(err);

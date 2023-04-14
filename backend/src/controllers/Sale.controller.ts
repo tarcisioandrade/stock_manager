@@ -1,5 +1,6 @@
 import { ISaleRepo } from "@/repository/SaleRepo";
 import { IStockRepo } from "@/repository/StockRepo";
+import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
 import { SaleProductSchema } from "@/validators/SaleSchema";
 import { Request, Response } from "express";
 import { ZodError } from "zod";
@@ -52,10 +53,7 @@ export class SaleController {
     } catch (err) {
       if (err instanceof ZodError) {
         return res.status(400).json({
-          error: err.issues.map((issue) => ({
-            path: issue.path[0],
-            message: issue.message,
-          })),
+          error: ZodErrorFormatter(err),
         });
       }
       console.log(err);
