@@ -1,5 +1,5 @@
 import { BranchController } from "@/controllers/Branch.controller";
-import { BranchRepo } from "@/repository/BranchRepo";
+import { BranchRepo } from "@/repositories/BranchRepo";
 
 const service = new BranchController(new BranchRepo());
 

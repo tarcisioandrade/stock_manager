@@ -1,6 +1,6 @@
 import { AuthController } from "@/controllers/Auth.controller";
-import { UserRepo } from "@/repository/UserRepo";
-import { EntityRepo } from "@/repository/EntityRepo";
+import { UserRepo } from "@/repositories/UserRepo";
+import { EntityRepo } from "@/repositories/EntityRepo";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

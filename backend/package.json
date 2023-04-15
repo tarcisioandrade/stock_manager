@@ -4,7 +4,7 @@
   "description": "Backend to Stock Manager",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon -r tsconfig-paths/register src/server.ts",
+    "dev": "nodemon -r tsconfig-paths/register src/server.ts",
     "test": "jest --runInBand --watchAll"
   },
   "prisma": {

@@ -9,11 +9,11 @@ import { adminAuthorization, userAuthorization } from "./middleware/Auth";
 const router = Router();
 
 // AuthService
-router.post("/user/signup", adminAuthorization, AuthService.signup);
 router.post("/user/signin", AuthService.signin);
 router.get("/user/auth", userAuthorization, AuthService.authentication);
 
 // UserService
+router.post("/user/add", adminAuthorization, UserService.createUser);
 router.get("/users", adminAuthorization, UserService.getUsers);
 router.delete("/users/del/:id", adminAuthorization, UserService.deleteUser);
 router.put("/users/edit/:id", userAuthorization, UserService.editUser);

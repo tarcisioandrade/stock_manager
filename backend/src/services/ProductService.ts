@@ -1,8 +1,8 @@
 import { ProductController } from "@/controllers/Product.controller";
-import { ProductRepo } from "@/repository/ProductRepo";
-import { CategoryRepo } from "@/repository/CategoryRepo";
-import { StockRepo } from "@/repository/StockRepo";
-import { BranchRepo } from "@/repository/BranchRepo";
+import { ProductRepo } from "@/repositories/ProductRepo";
+import { CategoryRepo } from "@/repositories/CategoryRepo";
+import { StockRepo } from "@/repositories/StockRepo";
+import { BranchRepo } from "@/repositories/BranchRepo";
 
 const controller = new ProductController(
   new ProductRepo(),

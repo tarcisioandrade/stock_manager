@@ -1,6 +1,5 @@
-import { IEntityRepo } from "@/repository/EntityRepo";
-import { IUserRepo } from "@/repository/UserRepo";
-import { EditUserSchema } from "@/schemas/UserSchema";
+import { IUserRepo } from "@/repositories/UserRepo";
+import { EditUserSchema, UserSchema } from "@/schemas/UserSchema";
 import { Request, Response } from "express";
 import { ZodError, z } from "zod";
 import bcrypt from "bcrypt";
@@ -10,17 +9,52 @@ type Bcrypt = typeof bcrypt;
 
 export class UserController {
   private UserRepo: IUserRepo;
-  private EntityRepo: IEntityRepo;
   private bcrypt: Bcrypt;
 
-  constructor(userRepo: IUserRepo, entityRepo: IEntityRepo, bcrypt: Bcrypt) {
+  constructor(userRepo: IUserRepo, bcrypt: Bcrypt) {
     this.UserRepo = userRepo;
-    this.EntityRepo = entityRepo;
     this.bcrypt = bcrypt;
 
     this.getUsers = this.getUsers.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
     this.editUser = this.editUser.bind(this);
+    this.createUser = this.createUser.bind(this);
+  }
+
+  async createUser(req: Request, res: Response) {
+    try {
+      const { email, password, branch_id, entity_id, name, telephone } =
+        UserSchema.parse(req.body);
+
+      const userValid = await this.UserRepo.getUserByEmail(email);
+
+      if (userValid) {
+        res.status(400).json({
+          message: "User already exists",
+        });
+        return;
+      }
+
+      const hashedPassword = await this.bcrypt.hash(password, 10);
+
+      const user = await this.UserRepo.createUser(
+        email,
+        name,
+        hashedPassword,
+        branch_id,
+        entity_id,
+        telephone
+      );
+
+      res.status(201).json({ id: user.id });
+    } catch (err) {
+      if (err instanceof ZodError) {
+        return res.status(400).json({ error: ZodErrorFormatter(err) });
+      } else {
+        console.log("err", err);
+        return res.sendStatus(500);
+      }
+    }
   }
 
   async getUsers(req: Request, res: Response) {

@@ -1,5 +1,5 @@
-import { ISaleRepo } from "@/repository/SaleRepo";
-import { IStockRepo } from "@/repository/StockRepo";
+import { ISaleRepo } from "@/repositories/SaleRepo";
+import { IStockRepo } from "@/repositories/StockRepo";
 import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
 import { SaleProductSchema } from "@/schemas/SaleSchema";
 import { Request, Response } from "express";

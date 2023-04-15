@@ -1,12 +1,13 @@
-import { IUserRepo } from "@/repository/UserRepo";
+import { IUserRepo } from "@/repositories/UserRepo";
 import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
-import { LoginSchema, UserSchema } from "@/schemas/UserSchema";
+import { LoginSchema } from "@/schemas/UserSchema";
 import { Request, Response } from "express";
 import { ZodError } from "zod";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User, Entity } from "@prisma/client";
-import { IEntityRepo } from "@/repository/EntityRepo";
+import { IEntityRepo } from "@/repositories/EntityRepo";
+
 require("dotenv").config();
 
 type Bcrypt = typeof bcrypt;
@@ -17,6 +18,7 @@ export class AuthController {
   private EntityRepo: IEntityRepo;
   private bcrypt: Bcrypt;
   private jwt: JWT;
+
   constructor(
     userRepo: IUserRepo,
     entityRepo: IEntityRepo,
@@ -28,45 +30,8 @@ export class AuthController {
     this.bcrypt = bcrypt;
     this.jwt = jwt;
 
-    this.signup = this.signup.bind(this);
     this.signin = this.signin.bind(this);
     this.authentication = this.authentication.bind(this);
-  }
-
-  async signup(req: Request, res: Response) {
-    try {
-      const { email, password, branch_id, entity_id, name, telephone } =
-        UserSchema.parse(req.body);
-
-      const userValid = await this.UserRepo.getUserByEmail(email);
-
-      if (userValid) {
-        res.status(400).json({
-          message: "User already exists",
-        });
-        return;
-      }
-
-      const hashedPassword = await this.bcrypt.hash(password, 10);
-
-      const user = await this.UserRepo.createUser(
-        email,
-        name,
-        hashedPassword,
-        branch_id,
-        entity_id,
-        telephone
-      );
-
-      res.status(201).json({ id: user.id });
-    } catch (err) {
-      if (err instanceof ZodError) {
-        return res.status(400).json({ error: ZodErrorFormatter(err) });
-      } else {
-        console.log("err", err);
-        return res.sendStatus(500);
-      }
-    }
   }
 
   async signin(req: Request, res: Response) {

@@ -1,4 +1,4 @@
-import { IBranchRepo } from "@/repository/BranchRepo";
+import { IBranchRepo } from "@/repositories/BranchRepo";
 import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
 import { BranchSchema, EditBranchSchema } from "@/schemas/BranchSchema";
 import { Branch } from "@prisma/client";

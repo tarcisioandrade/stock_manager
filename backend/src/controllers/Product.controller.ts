@@ -1,7 +1,7 @@
-import { IBranchRepo } from "@/repository/BranchRepo";
-import { ICategoryRepo } from "@/repository/CategoryRepo";
-import { IProductRepo } from "@/repository/ProductRepo";
-import { IStockRepo } from "@/repository/StockRepo";
+import { IBranchRepo } from "@/repositories/BranchRepo";
+import { ICategoryRepo } from "@/repositories/CategoryRepo";
+import { IProductRepo } from "@/repositories/ProductRepo";
+import { IStockRepo } from "@/repositories/StockRepo";
 import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
 import { ProductSchema } from "@/schemas/ProductSchema";
 import { Request, Response } from "express";

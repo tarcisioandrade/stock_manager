@@ -13,8 +13,8 @@ app.use(express.json());
 app.use("/", routes);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  const erro = new Error("Not Found");
-  next(erro);
+  const err = new Error("Not Found");
+  next(err);
 });
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
