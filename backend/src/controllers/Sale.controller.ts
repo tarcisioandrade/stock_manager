@@ -4,15 +4,14 @@ import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
 import { SaleProductSchema } from "@/schemas/SaleSchema";
 import { Request, Response } from "express";
 import { ZodError } from "zod";
+import { IBranchRepo } from "@/repositories/BranchRepo";
 
 export class SaleController {
-  private StockRepo: IStockRepo;
-  private SaleRepo: ISaleRepo;
-
-  constructor(stockRepo: IStockRepo, saleRepo: ISaleRepo) {
-    this.StockRepo = stockRepo;
-    this.SaleRepo = saleRepo;
-
+  constructor(
+    private StockRepo: IStockRepo,
+    private SaleRepo: ISaleRepo,
+    private BranchRepo: IBranchRepo
+  ) {
     this.saleProduct = this.saleProduct.bind(this);
     this.getSalesHistory = this.getSalesHistory.bind(this);
   }
@@ -30,11 +29,19 @@ export class SaleController {
       const { branch_id } = req.params;
       const { stock_id, quantity, price } = SaleProductSchema.parse(req.body);
 
-      const stock = await this.StockRepo.getStock(stock_id);
+      const stock = await this.StockRepo.getStockById(stock_id);
+      const branch = await this.BranchRepo.getBranchById(branch_id);
 
       if (!stock) {
         res.status(400).json({
           error: "Stock not found",
+        });
+        return;
+      }
+
+      if (!branch) {
+        res.status(400).json({
+          error: "Branch not found",
         });
         return;
       }

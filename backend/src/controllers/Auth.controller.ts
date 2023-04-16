@@ -14,22 +14,12 @@ type Bcrypt = typeof bcrypt;
 type JWT = typeof jwt;
 
 export class AuthController {
-  private UserRepo: IUserRepo;
-  private EntityRepo: IEntityRepo;
-  private bcrypt: Bcrypt;
-  private jwt: JWT;
-
   constructor(
-    userRepo: IUserRepo,
-    entityRepo: IEntityRepo,
-    bcrypt: Bcrypt,
-    jwt: JWT
+    private UserRepo: IUserRepo,
+    private EntityRepo: IEntityRepo,
+    private bcrypt: Bcrypt,
+    private jwt: JWT
   ) {
-    this.UserRepo = userRepo;
-    this.EntityRepo = entityRepo;
-    this.bcrypt = bcrypt;
-    this.jwt = jwt;
-
     this.signin = this.signin.bind(this);
     this.authentication = this.authentication.bind(this);
   }

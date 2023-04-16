@@ -8,25 +8,17 @@ import { Request, Response } from "express";
 import { ZodError } from "zod";
 
 export class ProductController {
-  private ProductRepo: IProductRepo;
-  private CategoryRepo: ICategoryRepo;
-  private StockRepo: IStockRepo;
-  private BranchRepo: IBranchRepo;
-
   constructor(
-    productRepo: IProductRepo,
-    categoryRepo: ICategoryRepo,
-    stockRepo: IStockRepo,
-    branchRepo: IBranchRepo
+    private ProductRepo: IProductRepo,
+    private CategoryRepo: ICategoryRepo,
+    private StockRepo: IStockRepo,
+    private BranchRepo: IBranchRepo
   ) {
-    this.ProductRepo = productRepo;
-    this.CategoryRepo = categoryRepo;
-    this.StockRepo = stockRepo;
-    this.BranchRepo = branchRepo;
-
     this.createProduct = this.createProduct.bind(this);
     this.getAllProducts = this.getAllProducts.bind(this);
     this.getAllCategories = this.getAllCategories.bind(this);
+    this.getProduct = this.getProduct.bind(this);
+    this.addProductStock = this.addProductStock.bind(this);
   }
 
   async createProduct(req: Request, res: Response) {
@@ -90,6 +82,15 @@ export class ProductController {
       return;
     }
 
+    const branch = await this.BranchRepo.getBranchById(branch_id as string);
+
+    if (!branch) {
+      res.status(400).json({
+        error: "Branch not found",
+      });
+      return;
+    }
+
     if (category_id) {
       const category = await this.CategoryRepo.getCategoryByID(
         category_id as string
@@ -116,5 +117,65 @@ export class ProductController {
     const categories = await this.CategoryRepo.getCategories();
 
     res.status(200).json({ categories });
+  }
+
+  async getProduct(req: Request, res: Response) {
+    const { product_id } = req.params;
+
+    if (!product_id) {
+      res.status(400).json({
+        error: "Product id is required",
+      });
+      return;
+    }
+
+    const product = await this.ProductRepo.getProductById(product_id);
+
+    if (!product) {
+      res.status(400).json({
+        error: "Product not found",
+      });
+      return;
+    }
+
+    res.status(200).json({ product });
+  }
+
+  async addProductStock(req: Request, res: Response) {
+    const { product_id } = req.params;
+
+    const { stock_id, quantity } = req.body;
+
+    if (!product_id) {
+      res.status(400).json({
+        error: "Product id is required",
+      });
+      return;
+    }
+    if (!stock_id) {
+      res.status(400).json({
+        error: "Stock id is required",
+      });
+      return;
+    }
+    if (!quantity) {
+      res.status(400).json({
+        error: "Quantity is required",
+      });
+      return;
+    }
+
+    const product = await this.ProductRepo.getProductById(product_id);
+
+    if (!product) {
+      res.status(400).json({
+        error: "Product not found",
+      });
+      return;
+    }
+
+    this.StockRepo.updateStock(stock_id, Number(quantity))
+      .then((stock) => res.sendStatus(201))
+      .catch((error) => res.status(400).json({ error: "Stock not found" }));
   }
 }

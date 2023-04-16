@@ -14,7 +14,8 @@ export interface IStockRepo {
     q?: string
   ): Promise<ProductStock[]>;
   saleProductStock(stock_id: string, quantity: number): Promise<Stock>;
-  getStock(stock_id: string): Promise<Stock | null>;
+  getStockById(stock_id: string): Promise<Stock | null>;
+  updateStock(stock_id: string, quantity: number): Promise<Stock | null>;
 }
 
 export class StockRepo implements IStockRepo {
@@ -86,10 +87,25 @@ export class StockRepo implements IStockRepo {
     return stock;
   }
 
-  async getStock(stock_id: string) {
+  async getStockById(stock_id: string) {
     const stock = await prisma.stock.findUnique({
       where: {
         id: stock_id,
+      },
+    });
+
+    return stock;
+  }
+  
+  async updateStock(stock_id: string, quantity: number) {
+    const stock = await prisma.stock.update({
+      where: {
+        id: stock_id,
+      },
+      data: {
+        quantity: {
+          increment: quantity,
+        },
       },
     });
 

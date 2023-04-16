@@ -6,11 +6,7 @@ import { Request, Response } from "express";
 import { ZodError } from "zod";
 
 export class BranchController {
-  private BranchRepo: IBranchRepo;
-
-  constructor(branchRepo: IBranchRepo) {
-    this.BranchRepo = branchRepo;
-
+  constructor(private BranchRepo: IBranchRepo) {
     this.createBranch = this.createBranch.bind(this);
     this.deleteBranch = this.deleteBranch.bind(this);
     this.updateBranch = this.updateBranch.bind(this);

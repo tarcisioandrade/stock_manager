@@ -21,7 +21,11 @@ router.put("/users/edit/:id", userAuthorization, UserService.editUser);
 // BranchService
 router.post("/branch/add", adminAuthorization, BranchService.createBranch);
 router.get("/branchies", adminAuthorization, BranchService.getBranchies);
-router.delete("/branch/del/:id", adminAuthorization, BranchService.deleteBranch);
+router.delete(
+  "/branch/del/:id",
+  adminAuthorization,
+  BranchService.deleteBranch
+);
 router.put("/branch/edit/:id", adminAuthorization, BranchService.updateBranch);
 
 // ProductService
@@ -32,9 +36,20 @@ router.get(
   userAuthorization,
   ProductService.getAllCategories
 );
+router.get(
+  "/product/:product_id",
+  userAuthorization,
+  ProductService.getProduct
+);
+router.post(
+  "/product/:product_id",
+  userAuthorization,
+  ProductService.addProductStock
+);
 
 // SaleService
 router.get("/sale/:branch_id", userAuthorization, SaleService.getSalesHistory);
 router.post("/sale/:branch_id", userAuthorization, SaleService.saleProduct);
+
 
 export default router;
