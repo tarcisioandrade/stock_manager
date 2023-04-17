@@ -27,21 +27,22 @@ export class SaleController {
   async saleProduct(req: Request, res: Response) {
     try {
       const { branch_id } = req.params;
+
       const { stock_id, quantity, price } = SaleProductSchema.parse(req.body);
 
       const stock = await this.StockRepo.getStockById(stock_id);
       const branch = await this.BranchRepo.getBranchById(branch_id);
 
-      if (!stock) {
+      if (!branch) {
         res.status(400).json({
-          error: "Stock not found",
+          error: "Branch not found",
         });
         return;
       }
 
-      if (!branch) {
+      if (!stock) {
         res.status(400).json({
-          error: "Branch not found",
+          error: "Stock not found",
         });
         return;
       }
