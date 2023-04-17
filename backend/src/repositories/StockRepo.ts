@@ -1,5 +1,5 @@
 import prisma from "@/database/prisma";
-import { ProductStock, StockType } from "@/types/Stock";
+import { ProductStock } from "@/types/Stock";
 import { Stock } from "@prisma/client";
 
 export interface IStockRepo {

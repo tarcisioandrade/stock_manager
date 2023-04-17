@@ -46,7 +46,7 @@ export class ProductController {
       }
 
       if (nameIsValid) {
-        res.status(404).json({
+        res.status(400).json({
           error: "Product already exists",
         });
         return;

@@ -11,6 +11,8 @@ import { mockBranchRepo } from "./mockBranchRepo";
 import { mockSaleRepo } from "./mockSaleRepo";
 import { mockStockRepo } from "./mockStockRepo";
 import { mockResponse } from "./mockResponse";
+import { mockProductRepo } from "./mockProductRepo";
+import { mockCategoryRepo } from "./mockCategoryRepo";
 
 const mockEntity: Entity = {
   id: "clgjg7yo60000i4botgit71vj",
@@ -85,5 +87,7 @@ export {
   mockProduct,
   mockStock,
   mockSalesHistory,
+  mockProductRepo,
+  mockCategoryRepo,
   mockResponse,
 };

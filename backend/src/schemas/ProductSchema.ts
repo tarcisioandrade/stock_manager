@@ -13,4 +13,4 @@ export const ProductSchema = z.object({
   branch_id: z.string().cuid(),
 });
 
-
+export type BodyToCreateNewProduct = z.infer<typeof ProductSchema>
