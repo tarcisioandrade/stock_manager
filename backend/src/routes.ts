@@ -20,7 +20,7 @@ router.put("/users/edit/:id", userAuthorization, UserService.editUser);
 
 // BranchService
 router.post("/branch/add", adminAuthorization, BranchService.createBranch);
-router.get("/branchies", adminAuthorization, BranchService.getBranchies);
+router.get("/branchies/:entity_id", adminAuthorization, BranchService.getBranchies);
 router.delete(
   "/branch/del/:id",
   adminAuthorization,

@@ -11,5 +11,5 @@ export type ProductStock = {
   stock: {
     id: string;
     quantity: number;
-  };
-} & Product;
+  } | null;
+} & Omit<Product, "branch_id">;

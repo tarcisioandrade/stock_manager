@@ -4,6 +4,8 @@ import { BranchSchema, EditBranchSchema } from "@/schemas/BranchSchema";
 import { Branch } from "@prisma/client";
 import { Request, Response } from "express";
 import { ZodError } from "zod";
+import jwt from "jsonwebtoken";
+import { UserDecodedInfo } from "@/middleware/Auth";
 
 export class BranchController {
   constructor(private BranchRepo: IBranchRepo) {
@@ -15,7 +17,10 @@ export class BranchController {
 
   async createBranch(req: Request, res: Response) {
     try {
-      const { name, entity_id, location } = BranchSchema.parse(req.body);
+      const token = req.headers.authorization!.split(" ")[1];
+      const { id: entity_id } = jwt.decode(token) as UserDecodedInfo;
+
+      const { name, location } = BranchSchema.parse(req.body);
 
       this.BranchRepo.createBranch(name, location, entity_id)
         .then((branch) => {
@@ -69,7 +74,16 @@ export class BranchController {
   }
 
   async getBranchies(req: Request, res: Response) {
-    const { branchies, total } = await this.BranchRepo.getAllBranches();
+    const { entity_id } = req.params;
+
+    if (!entity_id) {
+      res.status(400).json({ error: "entity_id is required" });
+      return;
+    }
+
+    const { branchies, total } = await this.BranchRepo.getAllBranches(
+      entity_id
+    );
 
     res.status(200).json({
       branchies,

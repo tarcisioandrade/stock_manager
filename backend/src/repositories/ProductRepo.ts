@@ -16,6 +16,7 @@ export class ProductRepo implements IProductRepo {
         description: product.description,
         price: Number(product.price),
         category_id: product.category_id,
+        branch_id: product.branch_id
       },
     });
 

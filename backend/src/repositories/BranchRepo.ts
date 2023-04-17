@@ -8,7 +8,9 @@ export interface IBranchRepo {
     entity_id: string
   ): Promise<Branch>;
   getBranchById(id: string): Promise<Branch | null>;
-  getAllBranches(): Promise<{ branchies: Omit<Branch, "entity_id">[]; total: number }>;
+  getAllBranches(
+    entity_id: string
+  ): Promise<{ branchies: Omit<Branch, "entity_id">[]; total: number }>;
   updateBranch(id: string, updates: Partial<Branch>): Promise<Branch>;
   deleteBranch(id: string): Promise<Branch>;
 }
@@ -35,13 +37,16 @@ export class BranchRepo implements IBranchRepo {
     return branch;
   }
 
-  async getAllBranches() {
-    const branchies = await prisma.branch.findMany({select: {
-      id: true,
-      name: true,
-      location: true,
-      created_at: true
-    }});
+  async getAllBranches(entity_id: string) {
+    const branchies = await prisma.branch.findMany({
+      where: { entity_id },
+      select: {
+        id: true,
+        name: true,
+        location: true,
+        created_at: true,
+      },
+    });
 
     return { branchies, total: branchies.length };
   }

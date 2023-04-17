@@ -4,7 +4,7 @@ import prisma from "@/database/prisma";
 import { Entity, User } from "@prisma/client";
 require("dotenv").config();
 
-type UserDecodedInfo = {
+export type UserDecodedInfo = {
   id: string;
   role: "ADMIN" | "USER";
   entity_id: string;
@@ -33,7 +33,7 @@ export async function adminAuthorization(
     prisma.entity
       .findUnique({
         where: {
-          id: decodedUser.id,
+          id: decodedUser.entity_id,
         },
       })
       .then((entity) => {

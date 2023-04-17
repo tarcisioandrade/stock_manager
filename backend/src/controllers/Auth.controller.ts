@@ -33,7 +33,7 @@ export class AuthController {
       if (type === "ADMIN") {
         userAuthenticate = await this.EntityRepo.getEntityByEmail(email);
         propsToSignIn = {
-          id: userAuthenticate?.id,
+          entity_id: userAuthenticate?.id,
           role: userAuthenticate?.role,
         };
       } else if (type === "USER") {
@@ -71,8 +71,6 @@ export class AuthController {
           expiresIn: "15d",
         }
       );
-
-      console.log("SIGNIN", { userAuthenticate, propsToSignIn });
 
       res.status(200).json({ token });
     } catch (err) {

@@ -44,6 +44,9 @@ export class StockRepo implements IStockRepo {
           {
             category_id,
           },
+          {
+            branch_id,
+          }
         ],
       },
       include: {
@@ -62,10 +65,12 @@ export class StockRepo implements IStockRepo {
         description: products[i].description,
         price: products[i].price,
         category_id: products[i].category_id,
-        stock: {
-          id: products[i].stocks[0].id,
-          quantity: products[i].stocks[0].quantity,
-        },
+        stock: products[i].stocks.length
+          ? {
+              id: products[i].stocks[0].id,
+              quantity: products[i].stocks[0].quantity,
+            }
+          : null,
       });
     }
 
@@ -96,7 +101,7 @@ export class StockRepo implements IStockRepo {
 
     return stock;
   }
-  
+
   async updateStock(stock_id: string, quantity: number) {
     const stock = await prisma.stock.update({
       where: {

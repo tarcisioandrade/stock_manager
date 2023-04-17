@@ -47,6 +47,7 @@ model Branch {
   entity       Entity        @relation(fields: [entity_id], references: [id])
   entity_id    String
   User         User[]
+  Product      Product[]
 
   @@map("branches")
 }
@@ -69,6 +70,8 @@ model Product {
   sale_history SaleHistory[]
   category     Category      @relation(fields: [category_id], references: [id])
   category_id  String
+  branch       Branch        @relation(fields: [branch_id], references: [id])
+  branch_id    String
 
   @@map("products")
 }
@@ -94,7 +97,7 @@ model SaleHistory {
   branch_id  String
   product    Product  @relation(fields: [product_id], references: [id])
   product_id String
-  stock      Stock?   @relation(fields: [stock_id], references: [id])
+  stock      Stock    @relation(fields: [stock_id], references: [id])
   stock_id   String
 
   @@map("sales_history")

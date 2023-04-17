@@ -5,7 +5,6 @@ export const UserSchema = z.object({
   name: z.string(),
   password: z.string().min(8),
   telephone: z.string().optional(),
-  entity_id: z.string().cuid(),
   branch_id: z.string().cuid(),
 });
 

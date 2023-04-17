@@ -44,6 +44,7 @@ async function main() {
       description: "Cerveja gelada",
       price: 40,
       category_id: category.id,
+      branch_id: branch.id
     },
   });
 

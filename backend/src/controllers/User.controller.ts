@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 import { ZodError, z } from "zod";
 import bcrypt from "bcrypt";
 import { ZodErrorFormatter } from "@/utils/ZodErrorFormatter";
+import { UserDecodedInfo } from "@/middleware/Auth";
+import jwt from "jsonwebtoken";
 
 type Bcrypt = typeof bcrypt;
 
@@ -23,8 +25,12 @@ export class UserController {
 
   async createUser(req: Request, res: Response) {
     try {
-      const { email, password, branch_id, entity_id, name, telephone } =
-        UserSchema.parse(req.body);
+      const token = req.headers.authorization!.split(" ")[1];
+      const { id: entity_id } = jwt.decode(token) as UserDecodedInfo;
+
+      const { email, password, branch_id, name, telephone } = UserSchema.parse(
+        req.body
+      );
 
       const userValid = await this.UserRepo.getUserByEmail(email);
 
