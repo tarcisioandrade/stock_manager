@@ -8,6 +8,8 @@ export const UserSchema = z.object({
   branch_id: z.string().cuid(),
 });
 
+export type BodyToCreateUser = z.infer<typeof UserSchema>;
+
 export const LoginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),

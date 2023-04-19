@@ -13,12 +13,17 @@ import { mockStockRepo } from "./mockStockRepo";
 import { mockResponse } from "./mockResponse";
 import { mockProductRepo } from "./mockProductRepo";
 import { mockCategoryRepo } from "./mockCategoryRepo";
+import { mockUserRepo } from "./mockUserRepo";
+import { mockEntityRepo } from "./mockEntityRepo";
+import bcrypt from "bcrypt";
+
+const hashPassword = bcrypt.hashSync("12345678", 10);
 
 const mockEntity: Entity = {
   id: "clgjg7yo60000i4botgit71vj",
   name: "Test",
   email: "entity@gmail.com",
-  password: "12345678",
+  password: hashPassword,
   role: "ADMIN",
   telephone: "7198677855",
   created_at: new Date(),
@@ -36,7 +41,7 @@ const mockUser: User = {
   id: "clgjg7yp30005i4bovgvihup8",
   name: "Tarcisio Andrade",
   email: "user@gmail.com",
-  password: "12345678",
+  password: hashPassword,
   role: "USER",
   telephone: "7198677855",
   branch_id: mockBranch.id,
@@ -89,5 +94,7 @@ export {
   mockSalesHistory,
   mockProductRepo,
   mockCategoryRepo,
+  mockUserRepo,
+  mockEntityRepo,
   mockResponse,
 };
