@@ -8,15 +8,14 @@ import { UserDecodedInfo } from "@/middleware/Auth";
 import jwt from "jsonwebtoken";
 
 type Bcrypt = typeof bcrypt;
+type JWT = typeof jwt;
 
 export class UserController {
-  private UserRepo: IUserRepo;
-  private bcrypt: Bcrypt;
-
-  constructor(userRepo: IUserRepo, bcrypt: Bcrypt) {
-    this.UserRepo = userRepo;
-    this.bcrypt = bcrypt;
-
+  constructor(
+    private UserRepo: IUserRepo,
+    private bcrypt: Bcrypt,
+    private jwt: JWT
+  ) {
     this.getUsers = this.getUsers.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
     this.editUser = this.editUser.bind(this);
@@ -26,7 +25,7 @@ export class UserController {
   async createUser(req: Request, res: Response) {
     try {
       const token = req.headers.authorization!.split(" ")[1];
-      const { id: entity_id } = jwt.decode(token) as UserDecodedInfo;
+      const { id: entity_id } = this.jwt.decode(token) as UserDecodedInfo;
 
       const { email, password, branch_id, name, telephone } = UserSchema.parse(
         req.body
