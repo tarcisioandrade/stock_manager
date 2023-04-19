@@ -45,17 +45,12 @@ export class AuthController {
         };
       }
 
-      
       if (!userAuthenticate) {
         res.status(400).json({
           message: "E-mail or password incorrect.",
         });
         return;
       }
-
-      console.log('userAuthenticate', userAuthenticate)
-      console.log('password', password)
-      console.log('userAuthenticate.password', userAuthenticate.password)
 
       const isPasswordValid = await this.bcrypt.compare(
         password,
