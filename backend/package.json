@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register src/server.ts",
-    "test": "jest --runInBand --watchAll"
+    "test": "jest --runInBand --watchAll",
+    "build": "tsup src --minify",
+    "start": "node dist/server.js"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -34,6 +36,7 @@
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   }
 }
