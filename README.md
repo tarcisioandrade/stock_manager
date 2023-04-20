@@ -24,7 +24,7 @@ Requer [Node.js](https://nodejs.org/) v16+ para executar o projeto.
 Dependencias Globais.
 
 ```sh
-npm install nodemon
+npm install -g nodemon
 ```
 
 Executando projeto em desenvolvimento.
@@ -32,6 +32,13 @@ Executando projeto em desenvolvimento.
 ```sh
 npm install
 npm run dev
+```
+
+Executando projeto em produção.
+
+```sh
+npm install
+npm run start
 ```
 .env
 ```sh
