@@ -53,3 +53,7 @@ Para lançamento em produção:
 ```sh
 npm run build
 ```
+
+## License
+
+MIT
