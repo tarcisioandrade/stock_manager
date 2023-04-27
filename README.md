@@ -9,7 +9,7 @@ API RESTful para controle de estoque.
 - Histórico das vendas.
 - Produtos separados por categorias.
 
-## Tecnólogias
+## Tecnologias
 
 
 - [Node.js](https://nodejs.org/) - Usado para o desenvolvimento da API.
