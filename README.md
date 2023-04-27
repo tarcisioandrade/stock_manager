@@ -1,4 +1,4 @@
-# SAAS Stock Manager
+# Stock Manager
 API RESTful para controle de estoque.
 
 
